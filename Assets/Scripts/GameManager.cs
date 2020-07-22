@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] TMP_Text player1ScoreUI;
     [SerializeField] TMP_Text player2ScoreUI;
     private int player1Score = 0;
-    private int player2Score = 0;
+    private int player2Score = 0; 
 
     // Start is called before the first frame update
     void Start() {
@@ -29,6 +29,6 @@ public class GameManager : MonoBehaviour {
             player2Score++;
             player2ScoreUI.text = $"{player2Score}";
         }
-
     }
+
 }

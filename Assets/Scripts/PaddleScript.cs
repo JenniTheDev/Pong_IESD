@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class PaddleScript : MonoBehaviour {
 
-    [SerializeField] bool isPlayerTwo;
-    [SerializeField] float speed = 0.2f;
+    [SerializeField] private bool isPlayerTwo;
+    [SerializeField] private float speed = 0.2f;
     Transform myTransform;
-    private int direction = 0; // 0 = still, 1 = up, -1 = down
+
+    private int direction = 0; // o= still, 1 = up, -1 = down
     private float previousPositionY;
-    private int adjustForce = 5;
+
+    [SerializeField] private KeyCode player1Up;
+    [SerializeField] private KeyCode player1Down;
+    [SerializeField] private KeyCode player2Up;
+    [SerializeField] private KeyCode player2Down;
+
     private int maxY = 4;
     private int minY = -4;
-
-
 
     // Start is called before the first frame update
     void Start() {
@@ -25,30 +29,32 @@ public class PaddleScript : MonoBehaviour {
     void Update() {
 
         if (isPlayerTwo) {
-            if (Input.GetKey("o"))
+            if (Input.GetKey(player2Up))
                 MoveUp();
-            else if (Input.GetKey("l"))
+            else if (Input.GetKey(player2Down))
                 MoveDown();
         } else {
-            if (Input.GetKey("q"))
+            if (Input.GetKey(player1Up))
                 MoveUp();
-            else if (Input.GetKey("a"))
+            else if (Input.GetKey(player1Down))
                 MoveDown();
         }
 
         Vector2 pos = myTransform.position;
         pos.y = Mathf.Clamp(myTransform.position.y, minY, maxY);
-        myTransform.position = pos;
+        myTransform.position = pos; 
 
     }
 
-    void MoveUp() {
+
+    private void MoveUp() {
         myTransform.position = new Vector2(myTransform.position.x, myTransform.position.y + speed);
     }
 
-    void MoveDown() {
+    private void MoveDown() {
         myTransform.position = new Vector2(myTransform.position.x, myTransform.position.y - speed);
     }
+
 
     private void LateUpdate() {
         previousPositionY = myTransform.position.y;
@@ -57,18 +63,12 @@ public class PaddleScript : MonoBehaviour {
             direction = -1;
         else if (previousPositionY < myTransform.position.y)
             direction = 1;
-        else
-            direction = 0;
-
-
+        else direction = 0;
     }
 
     private void OnCollisionExit2D(Collision2D collision) {
-        float adjust = adjustForce * direction;
+        float adjust = 5 * direction;
         collision.rigidbody.velocity = new Vector2(collision.rigidbody.velocity.x, collision.rigidbody.velocity.y + adjust);
     }
-
-
-
 
 }

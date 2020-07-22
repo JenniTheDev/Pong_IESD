@@ -1,23 +1,21 @@
-﻿using System.Collections;
+﻿using Packages.Rider.Editor.PostProcessors;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BallScript : MonoBehaviour {
 
-    [SerializeField] float forceValue = 4.5f;
+    [SerializeField] private float forceValue = 4.5f;
+    [SerializeField] private int startforce = 50;
+    Rigidbody2D myBody;
+
     [SerializeField] Transform startPoint;
-    const int startForce = 50;
     const string player1Wall = "Player1Wall";
     const string player2Wall = "Player2Wall";
-    private int force = 50;
-    Rigidbody2D myBody;
     private GameManager gm;
-
-
 
     // Start is called before the first frame update
     void Start() {
-
         myBody = GetComponent<Rigidbody2D>();
         ResetBall();
         gm = FindObjectOfType<GameManager>();
@@ -32,9 +30,8 @@ public class BallScript : MonoBehaviour {
     private void ResetBall() {
         transform.position = startPoint.position;
         myBody.velocity = Vector2.zero;
-        myBody.AddForce(new Vector2(forceValue * startForce, startForce));
+        myBody.AddForce(new Vector2(forceValue * startforce, startforce));
     }
-
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.tag == player1Wall) {
@@ -45,11 +42,5 @@ public class BallScript : MonoBehaviour {
             gm.AddToPlayerScore(1);
             ResetBall();
         }
-
     }
-
-
-
-
-
 }
