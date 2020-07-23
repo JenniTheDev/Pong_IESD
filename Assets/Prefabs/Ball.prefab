@@ -134,3 +134,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startForce: 10
+  maxStartAngle: 0.8
+  maxMagnitude: 25

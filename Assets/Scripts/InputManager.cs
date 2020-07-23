@@ -16,11 +16,6 @@ public class InputManager : MonoBehaviour {
     private IMoveablePaddle p1Input;
     private IMoveablePaddle p2Input;
 
-    #region Events & Delegates
-    public delegate void OnResetHandler();
-    public event OnResetHandler OnReset;
-    #endregion
-
     #region MonoBehaviour
     private void Start() {
         p1Input = p1Paddle.GetComponent<IMoveablePaddle>();
@@ -42,7 +37,7 @@ public class InputManager : MonoBehaviour {
         }
 
         if(Input.GetKey(resetKey)) {
-            OnReset?.Invoke();
+            EventController.Instance.BroadcastReset();
         }
     }
 

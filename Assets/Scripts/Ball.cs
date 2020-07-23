@@ -1,13 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Ball : MonoBehaviour {
     [SerializeField] private float startForce = 10.0f;
     [SerializeField] private float maxStartAngle = 0.8f;
+    [SerializeField] private float maxMagnitude;
 
     private Rigidbody2D rbody;
+    #region Properties
+
+    #endregion
 
     #region MonoBehaviour
     private void Awake() {
@@ -15,7 +18,11 @@ public class Ball : MonoBehaviour {
     }
 
     private void Start() {
-        FindObjectOfType<InputManager>().OnReset += Reset;
+        EventController.Instance.OnReset += Reset;
+    }
+
+    private void FixedUpdate() {
+        AdjustMagnitude(); 
     }
     #endregion
 
@@ -25,13 +32,20 @@ public class Ball : MonoBehaviour {
     }
 
     public void Reset(Vector2 pos) {
-        // Determines random right or left target.
-        float startDir = (Random.value >= 0.5f) ? 1f : -1f;
-        // Randomizes the angle of start
-        Vector2 dir = new Vector2(startDir, Random.Range(-maxStartAngle, maxStartAngle));
+        // Determines random right or left target & the angle to start
+        float startDir = (UnityEngine.Random.value >= 0.5f) ? 1f : -1f;
+        float startAngle = UnityEngine.Random.Range(-maxStartAngle, maxStartAngle);
+
+        Vector2 dir = new Vector2(startDir, startAngle);
         rbody.velocity = Vector2.zero;
         transform.position = pos;
         rbody.velocity = dir * startForce;
+    }
+
+    private void AdjustMagnitude() {
+        if(rbody.velocity.magnitude > maxMagnitude) {
+            rbody.velocity = Vector2.ClampMagnitude(rbody.velocity, maxMagnitude);
+        }
     }
     #endregion
 }
