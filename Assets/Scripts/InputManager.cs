@@ -5,14 +5,21 @@ using UnityEngine;
 public class InputManager : MonoBehaviour {
     [SerializeField] private Paddle p1Paddle;
     [SerializeField] private Paddle p2Paddle;
+    [SerializeField] private Ball theBall;
 
-    [SerializeField] private KeyCode p1UpKey;
-    [SerializeField] private KeyCode p1DownKey;
-    [SerializeField] private KeyCode p2UpKey;
-    [SerializeField] private KeyCode p2DownKey;
+    [SerializeField] private KeyCode p1UpKey = KeyCode.W;
+    [SerializeField] private KeyCode p1DownKey = KeyCode.S;
+    [SerializeField] private KeyCode p2UpKey = KeyCode.UpArrow;
+    [SerializeField] private KeyCode p2DownKey = KeyCode.DownArrow;
+    [SerializeField] private KeyCode resetKey = KeyCode.R;
 
     private IMoveablePaddle p1Input;
     private IMoveablePaddle p2Input;
+
+    #region Events & Delegates
+    public delegate void OnResetHandler();
+    public event OnResetHandler OnReset;
+    #endregion
 
     #region MonoBehaviour
     private void Start() {
@@ -32,6 +39,10 @@ public class InputManager : MonoBehaviour {
         }
         if(Input.GetKey(p2DownKey)) {
             p2Input.MoveDown();
+        }
+
+        if(Input.GetKey(resetKey)) {
+            OnReset?.Invoke();
         }
     }
 
