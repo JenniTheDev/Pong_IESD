@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class EventController {
     #region Singleton
@@ -14,16 +15,25 @@ public class EventController {
         }
     }
 
+    private EventController() { }
     #endregion
 
     #region Events & Delegates
     public delegate void OnResetHandler();
     public event OnResetHandler OnReset;
+
+    public delegate void OnScoreChangeHandler(Player changedPlayer, int changeBy);
+    public event OnScoreChangeHandler OnScoreChange;
     #endregion
 
     #region Class Methods
+    
     public void BroadcastReset() {
         OnReset?.Invoke();
+    }
+
+    public void BroadcastScoreChange(Player changedPlayer, int changeBy) {
+        OnScoreChange?.Invoke(changedPlayer, changeBy);
     }
     #endregion
 }

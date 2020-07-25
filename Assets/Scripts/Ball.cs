@@ -22,7 +22,7 @@ public class Ball : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        AdjustMagnitude(); 
+        AdjustMagnitude();        
     }
     #endregion
 

@@ -3,8 +3,13 @@
 [RequireComponent(typeof(Rigidbody2D))]
 public class Paddle : MonoBehaviour, IMoveablePaddle {
     [SerializeField] private float moveForce;
+    [SerializeField] private Player thePlayer;
 
     private Rigidbody2D rb;
+
+    public Player ThePlayer {
+        get { return this.thePlayer; }
+    }
 
     #region MonoBehaviour
 
