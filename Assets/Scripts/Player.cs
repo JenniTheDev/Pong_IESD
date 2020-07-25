@@ -23,6 +23,7 @@ public class Player : MonoBehaviour {
 
     #region MonoBehaviour
     private void Start() {
+        paddle.AssociatedPlayer = this;
         wall.AssociatedPlayer = this;
     }
 

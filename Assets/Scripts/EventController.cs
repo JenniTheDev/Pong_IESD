@@ -25,6 +25,12 @@ public class EventController {
     public delegate void OnScoreChangeHandler(Player changedPlayer, int changeBy);
     public event OnScoreChangeHandler OnScoreChange;
 
+    public delegate void OnWallHitHandler();
+    public event OnWallHitHandler OnWallHit;
+
+    public delegate void OnPlayerPaddleHitHandler(Player hitPlayerPaddle);
+    public event OnPlayerPaddleHitHandler OnPlayerPaddleHit;
+
     public delegate void OnPlayerWallHitHandler(Player hitPlayerWall);
     public event OnPlayerWallHitHandler OnPlayerWallHit;
     #endregion
@@ -35,12 +41,20 @@ public class EventController {
         OnReset?.Invoke();
     }
 
-    internal void BroadcastPlayerWallHit(Player playerWallHit) {
+    public void BroadcastScoreChange(Player changedPlayer, int changeBy) {
+        OnScoreChange?.Invoke(changedPlayer, changeBy);
+    }
+
+    public void BroadcastPlayerWallHit(Player playerWallHit) {
         OnPlayerWallHit?.Invoke(playerWallHit);
     }
 
-    public void BroadcastScoreChange(Player changedPlayer, int changeBy) {
-        OnScoreChange?.Invoke(changedPlayer, changeBy);
+    public void BroadcastPaddleHit(Player hitPaddle) {
+        OnPlayerPaddleHit?.Invoke(hitPaddle);
+    }
+
+    public void BroadcastWallHit() {
+        OnWallHit?.Invoke();
     }
     #endregion
 }
