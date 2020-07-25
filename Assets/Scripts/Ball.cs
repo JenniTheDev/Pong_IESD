@@ -20,7 +20,7 @@ public class Ball : MonoBehaviour {
         rbody = GetComponent<Rigidbody2D>();
         playerWallLayer = LayerMask.NameToLayer("PlayerWall");
         playerPaddleLayer = LayerMask.NameToLayer("PlayerPaddle");
-        wallLayer = LayerMask.NameToLayer("Wall");
+        wallLayer = LayerMask.NameToLayer("BoundsWall");
     }
 
     private void Start() {

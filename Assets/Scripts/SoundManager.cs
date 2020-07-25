@@ -10,8 +10,8 @@ public class SoundManager : MonoBehaviour {
     [SerializeField] private AudioClip[] playerWallHits;
 
     [SerializeField] private bool randomizePlayerPaddleHits = true;
-    [SerializeField] private AudioSource playerPaddleWallHit;
-    [SerializeField] private AudioClip[] playerPaddleWallHits;
+    [SerializeField] private AudioSource playerPaddleHit;
+    [SerializeField] private AudioClip[] playerPaddleHits;
 
     #region MonoBehaviour
     private void Start() {
@@ -44,15 +44,25 @@ public class SoundManager : MonoBehaviour {
         }
     }
 
+    private void PlayPlayerPaddleHit(Player p) {
+        if(playerPaddleHits.Length > 0) {
+            int clipNumToPlay = (randomizePlayerPaddleHits) ? Random.Range(0, playerPaddleHits.Length) : 0;
+            playerPaddleHit.clip = playerPaddleHits[clipNumToPlay];
+            playerPaddleHit.Play();
+        }
+    }
+
     private void Subscribe() {
         Unsubscribe();
         EventController.Instance.OnWallHit += PlayWallHit;
         EventController.Instance.OnPlayerWallHit += PlayPlayerWallHit;
+        EventController.Instance.OnPlayerPaddleHit += PlayPlayerPaddleHit;
     }
 
     private void Unsubscribe() {
         EventController.Instance.OnWallHit -= PlayWallHit;
         EventController.Instance.OnPlayerWallHit -= PlayPlayerWallHit;
+        EventController.Instance.OnPlayerPaddleHit -= PlayPlayerPaddleHit;
     }
     #endregion
 }
