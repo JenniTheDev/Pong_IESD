@@ -1,23 +1,28 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 
 [System.Serializable]
-public class Player {
-    [SerializeField] private int playerNum;
-    [SerializeField] private int score;
+public class Player : MonoBehaviour {
+    [SerializeField] private int id;
+    [SerializeField] private Paddle paddle;
+    [SerializeField] private PlayerWall wall;
+
+    private int score;
 
     #region Properties
     public int Score {
         get { return score; }
         set { score = Math.Max(0, value); }
     }
+
+    public int Id {
+        get { return this.id; }
+    }
     #endregion
 
-    #region Constructors
-    public Player(int playerNum = -1, int score = 0) {
-        this.playerNum = playerNum;
-        Score = score;
-    }
+    #region MonoBehaviour
+
     #endregion
 
     #region Class Methods
