@@ -7,6 +7,8 @@ public class Ball : MonoBehaviour {
     [SerializeField] private float maxStartAngle = 0.8f;
     [SerializeField] private float maxMagnitude;
 
+    private LayerMask playerWallLayer;
+
     private Rigidbody2D rbody;
     #region Properties
 
@@ -15,6 +17,7 @@ public class Ball : MonoBehaviour {
     #region MonoBehaviour
     private void Awake() {
         rbody = GetComponent<Rigidbody2D>();
+        playerWallLayer = LayerMask.NameToLayer("PlayerWall");
     }
 
     private void Start() {
@@ -23,6 +26,14 @@ public class Ball : MonoBehaviour {
 
     private void FixedUpdate() {
         AdjustMagnitude();        
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if(collision.gameObject.layer == playerWallLayer) {
+            Player hitPlayer = collision.gameObject.GetComponent<PlayerWall>().AssociatedPlayer;
+            EventController.Instance.BroadcastPlayerWallHit(hitPlayer);
+            Reset();
+        }
     }
     #endregion
 

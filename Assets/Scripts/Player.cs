@@ -2,11 +2,11 @@
 using TMPro;
 using UnityEngine;
 
-[System.Serializable]
 public class Player : MonoBehaviour {
     [SerializeField] private int id;
     [SerializeField] private Paddle paddle;
     [SerializeField] private PlayerWall wall;
+    [SerializeField] private TMP_Text scoreUI;
 
     private int score;
 
@@ -22,13 +22,38 @@ public class Player : MonoBehaviour {
     #endregion
 
     #region MonoBehaviour
+    private void Start() {
+        wall.AssociatedPlayer = this;
+    }
 
+    private void OnEnable() {
+        Subscribe();
+    }
+
+    private void OnDisable() {
+        Unsubscribe();
+    }
     #endregion
 
     #region Class Methods
-    public void ChangeScoreBy(int changeBy) {
-        Score += changeBy;
-        EventController.Instance.BroadcastScoreChange(this, score);
+    private void IncreaseScore() {
+        Score++;
+        scoreUI.text = score.ToString();
+    }
+
+    public void UpdateScore(Player thePlayer) {
+        if(thePlayer == this) {
+            IncreaseScore();
+        }
+    }
+
+    private void Subscribe() {
+        Unsubscribe();
+        EventController.Instance.OnPlayerWallHit += UpdateScore;
+    }
+
+    private void Unsubscribe() {
+        EventController.Instance.OnPlayerWallHit -= UpdateScore;
     }
     #endregion
 }

@@ -24,12 +24,19 @@ public class EventController {
 
     public delegate void OnScoreChangeHandler(Player changedPlayer, int changeBy);
     public event OnScoreChangeHandler OnScoreChange;
+
+    public delegate void OnPlayerWallHitHandler(Player hitPlayerWall);
+    public event OnPlayerWallHitHandler OnPlayerWallHit;
     #endregion
 
     #region Class Methods
-    
+
     public void BroadcastReset() {
         OnReset?.Invoke();
+    }
+
+    internal void BroadcastPlayerWallHit(Player playerWallHit) {
+        OnPlayerWallHit?.Invoke(playerWallHit);
     }
 
     public void BroadcastScoreChange(Player changedPlayer, int changeBy) {
