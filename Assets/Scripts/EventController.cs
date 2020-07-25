@@ -33,6 +33,12 @@ public class EventController {
 
     public delegate void OnPlayerWallHitHandler(Player hitPlayerWall);
     public event OnPlayerWallHitHandler OnPlayerWallHit;
+
+    public delegate void OnPauseHandler();
+    public event OnPauseHandler OnPause;
+
+    public delegate void OnResumeHandler();
+    public event OnResumeHandler OnResume;
     #endregion
 
     #region Class Methods
@@ -55,6 +61,14 @@ public class EventController {
 
     public void BroadcastWallHit() {
         OnWallHit?.Invoke();
+    }
+
+    public void BroadcastPause() {
+        OnPause?.Invoke();
+    }
+
+    public void BroadcastResume() {
+        OnResume?.Invoke();
     }
     #endregion
 }

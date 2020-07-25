@@ -6,11 +6,14 @@ public class Ball : MonoBehaviour {
     [SerializeField] private float startForce = 10.0f;
     [SerializeField] private float maxStartAngle = 0.8f;
     [SerializeField] private float maxMagnitude;
+    [SerializeField] private float minMagnitude;
 
     private LayerMask playerWallLayer;
     private LayerMask playerPaddleLayer;
     private LayerMask wallLayer;
     private Rigidbody2D rbody;
+    private Vector2 savedVelocity;
+
     #region Properties
 
     #endregion
@@ -24,9 +27,16 @@ public class Ball : MonoBehaviour {
     }
 
     private void Start() {
-        EventController.Instance.OnReset += Reset;
+        Subscribe();
     }
 
+    private void OnEnable() {
+        Subscribe();
+    }
+
+    private void OnDisable() {
+        Unsubscribe();
+    }
     private void FixedUpdate() {
         AdjustMagnitude();
     }
@@ -35,7 +45,7 @@ public class Ball : MonoBehaviour {
         if(collision.gameObject.layer == playerWallLayer) {
             Player hitPlayer = collision.gameObject.GetComponent<PlayerWall>().AssociatedPlayer;
             EventController.Instance.BroadcastPlayerWallHit(hitPlayer);
-            Reset();
+            ResetAndLaunch();
         }
         if(collision.gameObject.layer == playerPaddleLayer) {
             Player hitPlayer = collision.gameObject.GetComponent<Paddle>().AssociatedPlayer;
@@ -50,24 +60,55 @@ public class Ball : MonoBehaviour {
 
     #region Methods
     public void Reset() {
-        Reset(Vector2.zero);
+        transform.position = Vector2.zero;
+        rbody.velocity = Vector2.zero;
     }
 
-    public void Reset(Vector2 pos) {
+    public void ResetAndLaunch() {
+        ResetAndLaunch(Vector3.zero);
+    }
+
+    public void ResetAndLaunch(Vector2 pos) {
+        Reset();
+
         // Determines random right or left target & the angle to start
         float startDir = (UnityEngine.Random.value >= 0.5f) ? 1f : -1f;
         float startAngle = UnityEngine.Random.Range(-maxStartAngle, maxStartAngle);
 
         Vector2 dir = new Vector2(startDir, startAngle);
-        rbody.velocity = Vector2.zero;
         transform.position = pos;
         rbody.velocity = dir * startForce;
+    }
+
+    public void Pause() {
+        savedVelocity = rbody.velocity;
+        rbody.velocity = Vector2.zero;
+    }
+
+    public void Resume() {
+        rbody.velocity = savedVelocity;
     }
 
     private void AdjustMagnitude() {
         if(rbody.velocity.magnitude > maxMagnitude) {
             rbody.velocity = Vector2.ClampMagnitude(rbody.velocity, maxMagnitude);
         }
+        if(rbody.velocity.magnitude < minMagnitude) {
+            rbody.AddForce(rbody.velocity * 2f);
+        }
+    }
+
+    private void Subscribe() {
+        Unsubscribe();
+        EventController.Instance.OnReset += ResetAndLaunch;
+        EventController.Instance.OnPause += Pause;
+        EventController.Instance.OnResume += Resume;
+    }
+
+    private void Unsubscribe() {
+        EventController.Instance.OnReset -= ResetAndLaunch;
+        EventController.Instance.OnPause -= Pause;
+        EventController.Instance.OnResume -= Resume;
     }
     #endregion
 }
