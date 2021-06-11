@@ -1,10 +1,10 @@
 # Pong_IESD <br>
 
-Pong is part of a multi part talk I gave for Inland Empire Software Development to teach how to create games in Unity. This project was used in Part 2. 
+Pong is part of a multi part talk I gave for Inland Empire Software Development to teach how to create games in Unity. This project was used in Part Two. 
 
 [Part One can be found here](https://github.com/JenniTheDev/Pong)
 
-
+## Table Of Contents<br>
 * [Introduction](#Introduction)
 * [Presentation Video](#Presentation)
 * [The Game](#Game)
